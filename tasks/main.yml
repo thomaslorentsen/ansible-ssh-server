@@ -1,0 +1,100 @@
+---
+- name: update openssh
+  become: yes
+  package:
+    name: openssh-server
+    state: latest
+  notify:
+    - check ssh daemon config
+    - restart ssh daemon
+
+- name: listen on port 22
+  become: yes
+  lineinfile:
+    regexp: '^#?Port'
+    line: 'Port 22'
+    dest: /etc/ssh/sshd_config
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart ssh daemon
+
+- name: enable privilege seperation
+  become: yes
+  lineinfile:
+    regexp: '^#?UsePrivilegeSeparation'
+    line: 'UsePrivilegeSeparation yes'
+    dest: /etc/ssh/sshd_config
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart ssh daemon
+
+- name: enable strict modes
+  become: yes
+  lineinfile:
+    regexp: '^#?StrictModes'
+    line: 'StrictModes yes'
+    dest: /etc/ssh/sshd_config
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart ssh daemon
+
+- name: only allow specified users to login
+  become: yes
+  lineinfile:
+    regexp: '^#?AllowUsers'
+    line: 'AllowUsers tom'
+    dest: /etc/ssh/sshd_config
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart ssh daemon
+
+- name: disallow root user from login
+  become: yes
+  lineinfile:
+    regexp: '^#?PermitRootLogin'
+    line: 'PermitRootLogin no'
+    dest: /etc/ssh/sshd_config
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart ssh daemon
+
+- name: disable password authentication
+  become: yes
+  lineinfile:
+    regexp: '^#?PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+    dest: /etc/ssh/sshd_config
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart ssh daemon
+
+- name: disable challenge response authentication
+  become: yes
+  lineinfile:
+    regexp: '^#?ChallengeResponseAuthentication'
+    line: 'ChallengeResponseAuthentication no'
+    dest: /etc/ssh/sshd_config
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart ssh daemon
+
+- name: disable Pam
+  become: yes
+  lineinfile:
+    regexp: '^#?UsePAM'
+    line: 'UsePAM no'
+    dest: /etc/ssh/sshd_config
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart ssh daemon
+
+- name: enable public key authentication
+  become: yes
+  lineinfile:
+    regexp: '^#?PubkeyAuthentication'
+    line: 'PubkeyAuthentication yes'
+    dest: /etc/ssh/sshd_config
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart ssh daemon
+
+- name: set authorised keys file location
+  become: yes
+  lineinfile:
+    regexp: '^#?AuthorizedKeysFile'
+    line: 'AuthorizedKeysFile     %h/.ssh/authorized_keys'
+    dest: /etc/ssh/sshd_config
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart ssh daemon
+...
