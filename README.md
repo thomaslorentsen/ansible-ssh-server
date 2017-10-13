@@ -14,6 +14,9 @@ Role Variables
 --------------
 
 
+| Var | Default | Description |
+| --- | --- | --- |
+|  ```ssh_daemon``` | ```ssh``` | SSH service name |
 
 Example Playbook
 ----------------
