@@ -17,6 +17,7 @@ Role Variables
 | Var | Default | Description |
 | --- | --- | --- |
 |  ```ssh_daemon``` | ```ssh``` | SSH service name |
+|  ```ssh_allowed_users``` | ```tom``` | SSH service name |
 
 Example Playbook
 ----------------
