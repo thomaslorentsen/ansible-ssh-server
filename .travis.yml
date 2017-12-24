@@ -1,9 +1,12 @@
 ---
 language: python
 python: "2.7"
+sudo: required
 
-# Use the new container infrastructure
-sudo: false
+env:
+  - ANSIBLE_VERSION=2.0.1.0
+  - ANSIBLE_VERSION=2.4.3.0
+  - ANSIBLE_VERSION=latest
 
 # Install ansible
 addons:
@@ -13,7 +16,7 @@ addons:
 
 install:
   # Install ansible
-  - pip install ansible
+  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
 
   # Check ansible version
   - ansible --version
@@ -28,4 +31,6 @@ install:
 script:
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check --list-tasks
+  # Run the role
+  - ansible-playbook -i tests/inventory tests/test.yml --connection=local
 ...
