@@ -35,15 +35,6 @@
     validate: '/usr/sbin/sshd -t -f %s'
   notify: restart ssh daemon
 
-- name: only allow specified users to login
-  become: yes
-  lineinfile:
-    regexp: '^#?AllowUsers'
-    line: 'AllowUsers {{ ssh_allowed_users }}'
-    dest: /etc/ssh/sshd_config
-    validate: '/usr/sbin/sshd -t -f %s'
-  notify: restart ssh daemon
-
 - name: disallow root user from login
   become: yes
   lineinfile:
@@ -94,6 +85,15 @@
   lineinfile:
     regexp: '^#?AuthorizedKeysFile'
     line: 'AuthorizedKeysFile     %h/.ssh/authorized_keys'
+    dest: /etc/ssh/sshd_config
+    validate: '/usr/sbin/sshd -t -f %s'
+  notify: restart ssh daemon
+
+- name: only allow specified users to login
+  become: yes
+  lineinfile:
+    regexp: '^#?AllowUsers'
+    line: 'AllowUsers {{ ssh_allowed_users }}'
     dest: /etc/ssh/sshd_config
     validate: '/usr/sbin/sshd -t -f %s'
   notify: restart ssh daemon
