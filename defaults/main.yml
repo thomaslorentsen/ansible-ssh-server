@@ -1,4 +1,5 @@
 ---
 ssh_daemon: ssh
 ssh_allowed_users: "tom"
+ssh_use_pam: "yes"
 ...
